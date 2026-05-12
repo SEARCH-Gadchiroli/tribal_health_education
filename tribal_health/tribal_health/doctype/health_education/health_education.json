@@ -1,0 +1,161 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:HE-{YYYY}-{MM}-{######}",
+ "creation": "2026-04-21 12:11:18.865152",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "date",
+  "select_the_health_education_topics_you_can_choose_more_than_one",
+  "area",
+  "villages_in_karwafa_area",
+  "villages_in_pendhari_area",
+  "villages_in_dhanora_area",
+  "villages_in_rangi_area",
+  "villages_in_murumgao_area",
+  "was_health_education_session_conducted_",
+  "reason_for_not_conducting_session",
+  "in_how_many_places_was_health_education_conducted_",
+  "location_1_name",
+  "location_1_number_of_participants",
+  "location_2_name",
+  "location_2_number_of_participants",
+  "location_3_name",
+  "location_3_number_of_participants",
+  "location_4_name",
+  "location_4_number_of_participants",
+  "total_number_of_participants"
+ ],
+ "fields": [
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "select_the_health_education_topics_you_can_choose_more_than_one",
+   "fieldtype": "Data",
+   "label": "Topics"
+  },
+  {
+   "fieldname": "area",
+   "fieldtype": "Data",
+   "label": "Area"
+  },
+  {
+   "fieldname": "villages_in_karwafa_area",
+   "fieldtype": "Data",
+   "label": "Villages in Karwafa Area"
+  },
+  {
+   "fieldname": "villages_in_pendhari_area",
+   "fieldtype": "Data",
+   "label": "Villages in Pendhari Area"
+  },
+  {
+   "fieldname": "villages_in_dhanora_area",
+   "fieldtype": "Data",
+   "label": "Villages in Dhanora Area"
+  },
+  {
+   "fieldname": "villages_in_rangi_area",
+   "fieldtype": "Data",
+   "label": "Villages in Rangi Area"
+  },
+  {
+   "fieldname": "villages_in_murumgao_area",
+   "fieldtype": "Data",
+   "label": "Villages in Murumgao Area"
+  },
+  {
+   "fieldname": "was_health_education_session_conducted_",
+   "fieldtype": "Data",
+   "label": "Session Conducted?"
+  },
+  {
+   "fieldname": "reason_for_not_conducting_session",
+   "fieldtype": "Data",
+   "label": "Reason For Not Conducting"
+  },
+  {
+   "fieldname": "in_how_many_places_was_health_education_conducted_",
+   "fieldtype": "Int",
+   "label": "Number of Places"
+  },
+  {
+   "fieldname": "location_1_name",
+   "fieldtype": "Data",
+   "label": "Location 1 Name"
+  },
+  {
+   "fieldname": "location_1_number_of_participants",
+   "fieldtype": "Int",
+   "label": "Location 1 Participants"
+  },
+  {
+   "fieldname": "location_2_name",
+   "fieldtype": "Data",
+   "label": "Location 2 Name"
+  },
+  {
+   "fieldname": "location_2_number_of_participants",
+   "fieldtype": "Int",
+   "label": "Location 2 Participants"
+  },
+  {
+   "fieldname": "location_3_name",
+   "fieldtype": "Data",
+   "label": "Location 3 Name"
+  },
+  {
+   "fieldname": "location_3_number_of_participants",
+   "fieldtype": "Int",
+   "label": "Location 3 Participants"
+  },
+  {
+   "fieldname": "location_4_name",
+   "fieldtype": "Data",
+   "label": "Location 4 Name"
+  },
+  {
+   "fieldname": "location_4_number_of_participants",
+   "fieldtype": "Int",
+   "label": "Location 4 Participants"
+  },
+  {
+   "fieldname": "total_number_of_participants",
+   "fieldtype": "Int",
+   "label": "Total Number of Participants"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-04-21 12:11:18.865152",
+ "modified_by": "Administrator",
+ "module": "Tribal Health",
+ "name": "Health Education",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
