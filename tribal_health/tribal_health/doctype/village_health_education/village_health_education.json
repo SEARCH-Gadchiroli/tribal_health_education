@@ -1,0 +1,171 @@
+ {
+  "actions": [],
+  "allow_rename": 1,
+ "creation": "2026-08-06 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "date",
+  "village",
+  "area",
+  "session_conducted",
+  "reason_for_not_conducting",
+  "number_of_places",
+  "total_number_of_participants",
+  "latitude",
+  "longitude",
+  "gps_raw",
+  "village_patil_met",
+  "village_patil_name",
+  "village_patil_feedback",
+  "reason_for_not_meeting_patil",
+  "search_driver_name",
+  "health_educator_name",
+  "raw_village_health_education",
+  "topics",
+  "locations"
+ ],
+ "fields": [
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "village",
+   "fieldtype": "Link",
+   "label": "Village",
+   "options": "Village Profile"
+  },
+  {
+   "fieldname": "area",
+   "fieldtype": "Data",
+   "label": "Area"
+  },
+  {
+   "fieldname": "session_conducted",
+   "fieldtype": "Select",
+   "label": "Session Conducted",
+   "options": "\nYes\nNo"
+  },
+  {
+   "fieldname": "reason_for_not_conducting",
+   "fieldtype": "Small Text",
+   "label": "Reason For Not Conducting"
+  },
+  {
+   "fieldname": "number_of_places",
+   "fieldtype": "Int",
+   "label": "Number of Places"
+  },
+  {
+   "fieldname": "total_number_of_participants",
+   "fieldtype": "Int",
+   "label": "Total Number of Participants"
+  },
+  {
+   "fieldname": "latitude",
+   "fieldtype": "Float",
+   "label": "Latitude"
+  },
+  {
+   "fieldname": "longitude",
+   "fieldtype": "Float",
+   "label": "Longitude"
+  },
+  {
+   "fieldname": "gps_raw",
+   "fieldtype": "Data",
+   "label": "GPS Raw"
+  },
+  {
+   "fieldname": "village_patil_met",
+   "fieldtype": "Select",
+   "label": "Village Patil Met",
+   "options": "\nYes\nNo"
+  },
+  {
+   "fieldname": "village_patil_name",
+   "fieldtype": "Data",
+   "label": "Village Patil Name"
+  },
+  {
+   "fieldname": "village_patil_feedback",
+   "fieldtype": "Small Text",
+   "label": "Village Patil Feedback"
+  },
+  {
+   "fieldname": "reason_for_not_meeting_patil",
+   "fieldtype": "Small Text",
+   "label": "Reason for Not Meeting Patil"
+  },
+  {
+   "fieldname": "search_driver_name",
+   "fieldtype": "Data",
+   "label": "Search Driver Name"
+  },
+  {
+   "fieldname": "health_educator_name",
+   "fieldtype": "Data",
+   "label": "Health Educator Name"
+  },
+  {
+   "fieldname": "raw_village_health_education",
+   "fieldtype": "Link",
+   "label": "Raw Village Health Education",
+   "options": "Raw Village Health Education"
+  },
+  {
+   "fieldname": "topics",
+   "fieldtype": "Table",
+   "label": "Topics",
+   "options": "Village Health Education Topic"
+  },
+  {
+   "fieldname": "locations",
+   "fieldtype": "Table",
+   "label": "Locations",
+   "options": "Village Health Education Location"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-08-06 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Tribal Health",
+ "name": "Village Health Education",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Tribal Health User",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

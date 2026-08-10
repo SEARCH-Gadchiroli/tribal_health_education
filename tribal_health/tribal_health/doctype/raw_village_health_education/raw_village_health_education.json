@@ -1,32 +1,43 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:HE-{YYYY}-{MM}-{######}",
+ "autoname": "format:RHE-{YYYY}-{MM}-{######}",
  "creation": "2026-04-21 12:11:18.865152",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "date",
-  "select_the_health_education_topics_you_can_choose_more_than_one",
+  "select_vhe_topics",
   "area",
   "villages_in_karwafa_area",
   "villages_in_pendhari_area",
   "villages_in_dhanora_area",
   "villages_in_rangi_area",
   "villages_in_murumgao_area",
-  "was_health_education_session_conducted_",
+  "gps_location",
+  "was_village_health_education_session_conducted_",
   "reason_for_not_conducting_session",
-  "in_how_many_places_was_health_education_conducted_",
+  "in_how_many_places_was_village_health_education_conducted_",
   "location_1_name",
   "location_1_number_of_participants",
+  "location_1_photo",
   "location_2_name",
   "location_2_number_of_participants",
+  "location_2_photo",
   "location_3_name",
   "location_3_number_of_participants",
+  "location_3_photo",
   "location_4_name",
   "location_4_number_of_participants",
-  "total_number_of_participants"
+  "location_4_photo",
+  "total_number_of_participants",
+  "village_patil_met",
+  "village_patil_name",
+  "village_patil_feedback",
+  "reason_for_not_meeting_patil",
+  "search_driver_name",
+  "health_educator_name"
  ],
  "fields": [
   {
@@ -35,7 +46,7 @@
    "label": "Date"
   },
   {
-   "fieldname": "select_the_health_education_topics_you_can_choose_more_than_one",
+   "fieldname": "select_vhe_topics",
    "fieldtype": "Data",
    "label": "Topics"
   },
@@ -45,32 +56,42 @@
    "label": "Area"
   },
   {
+   "depends_on": "eval:doc.area==\"कारवाफा\" || doc.area==\"1\"",
    "fieldname": "villages_in_karwafa_area",
    "fieldtype": "Data",
    "label": "Villages in Karwafa Area"
   },
   {
+   "depends_on": "eval:doc.area==\"पेंढरी\" || doc.area==\"2\"",
    "fieldname": "villages_in_pendhari_area",
    "fieldtype": "Data",
    "label": "Villages in Pendhari Area"
   },
   {
+   "depends_on": "eval:doc.area==\"धानोरा\" || doc.area==\"3\"",
    "fieldname": "villages_in_dhanora_area",
    "fieldtype": "Data",
    "label": "Villages in Dhanora Area"
   },
   {
+   "depends_on": "eval:doc.area==\"रांगी\" || doc.area==\"4\"",
    "fieldname": "villages_in_rangi_area",
    "fieldtype": "Data",
    "label": "Villages in Rangi Area"
   },
   {
+   "depends_on": "eval:doc.area==\"मुरूमगाव\" || doc.area==\"5\"",
    "fieldname": "villages_in_murumgao_area",
    "fieldtype": "Data",
    "label": "Villages in Murumgao Area"
   },
   {
-   "fieldname": "was_health_education_session_conducted_",
+   "fieldname": "gps_location",
+   "fieldtype": "Data",
+   "label": "GPS Location"
+  },
+  {
+   "fieldname": "was_village_health_education_session_conducted_",
    "fieldtype": "Data",
    "label": "Session Conducted?"
   },
@@ -80,7 +101,7 @@
    "label": "Reason For Not Conducting"
   },
   {
-   "fieldname": "in_how_many_places_was_health_education_conducted_",
+   "fieldname": "in_how_many_places_was_village_health_education_conducted_",
    "fieldtype": "Int",
    "label": "Number of Places"
   },
@@ -95,6 +116,11 @@
    "label": "Location 1 Participants"
   },
   {
+   "fieldname": "location_1_photo",
+   "fieldtype": "Attach Image",
+   "label": "Location 1 Photo"
+  },
+  {
    "fieldname": "location_2_name",
    "fieldtype": "Data",
    "label": "Location 2 Name"
@@ -103,6 +129,11 @@
    "fieldname": "location_2_number_of_participants",
    "fieldtype": "Int",
    "label": "Location 2 Participants"
+  },
+  {
+   "fieldname": "location_2_photo",
+   "fieldtype": "Attach Image",
+   "label": "Location 2 Photo"
   },
   {
    "fieldname": "location_3_name",
@@ -115,6 +146,11 @@
    "label": "Location 3 Participants"
   },
   {
+   "fieldname": "location_3_photo",
+   "fieldtype": "Attach Image",
+   "label": "Location 3 Photo"
+  },
+  {
    "fieldname": "location_4_name",
    "fieldtype": "Data",
    "label": "Location 4 Name"
@@ -125,18 +161,53 @@
    "label": "Location 4 Participants"
   },
   {
+   "fieldname": "location_4_photo",
+   "fieldtype": "Attach Image",
+   "label": "Location 4 Photo"
+  },
+  {
    "fieldname": "total_number_of_participants",
    "fieldtype": "Int",
    "label": "Total Number of Participants"
+  },
+  {
+   "fieldname": "village_patil_met",
+   "fieldtype": "Data",
+   "label": "Village Patil Met"
+  },
+  {
+   "fieldname": "village_patil_name",
+   "fieldtype": "Data",
+   "label": "Village Patil Name"
+  },
+  {
+   "fieldname": "village_patil_feedback",
+   "fieldtype": "Data",
+   "label": "Village Patil Feedback"
+  },
+  {
+   "fieldname": "reason_for_not_meeting_patil",
+   "fieldtype": "Data",
+   "label": "Reason for Not Meeting Patil"
+  },
+  {
+   "fieldname": "search_driver_name",
+   "fieldtype": "Data",
+   "label": "Search Driver Name"
+  },
+  {
+   "fieldname": "health_educator_name",
+   "fieldtype": "Data",
+   "label": "Health Educator Name"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-21 12:11:18.865152",
+ "modified": "2026-08-06 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "Tribal Health",
- "name": "Health Education",
+ "name": "Raw Village Health Education",
  "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
@@ -149,6 +220,18 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Tribal Health User",
    "share": 1,
    "write": 1
   }

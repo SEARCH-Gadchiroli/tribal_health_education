@@ -1,8 +1,8 @@
 // Copyright (c) 2026, SEARCH and contributors
 // For license information, please see license.txt
 
-// frappe.ui.form.on("Health Education", {
-// 	refresh(frm) {
+frappe.ui.form.on("Village Health Education", {
+	refresh(frm) {
 
-// 	},
-// });
+	},
+});

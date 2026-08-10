@@ -1,0 +1,1501 @@
+{% extends "templates/web.html" %}
+
+{% block title %}Village Health Education Sessions — SEARCH{% endblock %}
+
+{% block head_include %}
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+    /* ── Color Theme and Variables ────────────────────────────── */
+    :root {
+        --bg-primary: #f8fafc;
+        --bg-card: #ffffff;
+        --border-color: #e2e8f0;
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --text-muted: #94a3b8;
+        --topbar-bg: #ffffff;
+        --user-pill-bg: #f1f5f9;
+        --modal-bg: #ffffff;
+        --modal-footer-bg: #f8fafc;
+        
+        --brand-green: #0f766e;
+        --brand-green-hover: #115e59;
+        --brand-amber: #d97706;
+        --brand-amber-light: #fef3c7;
+        --status-conducted-bg: #d1fae5;
+        --status-conducted-text: #065f46;
+        --status-cancelled-bg: #fee2e2;
+        --status-cancelled-text: #991b1b;
+    }
+
+    [data-theme="dark"] {
+        --bg-primary: #0f172a;
+        --bg-card: #1e293b;
+        --border-color: #334155;
+        --text-primary: #f8fafc;
+        --text-secondary: #cbd5e1;
+        --text-muted: #64748b;
+        --topbar-bg: #1e293b;
+        --user-pill-bg: #334155;
+        --modal-bg: #1e293b;
+        --modal-footer-bg: #111827;
+        
+        --brand-green: #14b8a6;
+        --brand-green-hover: #2dd4bf;
+        --brand-amber: #fbbf24;
+        --brand-amber-light: #451a03;
+        --status-conducted-bg: #064e3b;
+        --status-conducted-text: #34d399;
+        --status-cancelled-bg: #7f1d1d;
+        --status-cancelled-text: #fca5a5;
+    }
+
+    body {
+        background: var(--bg-primary) !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+        color: var(--text-primary);
+        transition: background 0.3s, color 0.3s;
+    }
+
+    .page-header,
+    .breadcrumb,
+    .navbar {
+        display: none !important;
+    }
+
+    #health-education-root {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* ── Topbar ──────────────────────────────────────────────── */
+    .p-topbar {
+        background: var(--topbar-bg);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 32px;
+        height: 70px;
+        flex-shrink: 0;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+        transition: background 0.3s, border-color 0.3s;
+        backdrop-filter: blur(8px);
+    }
+
+    .p-topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .btn-back-portal {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-card);
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        font-size: 18px;
+    }
+
+    .btn-back-portal:hover {
+        background: var(--user-pill-bg);
+        color: var(--text-primary);
+        transform: translateX(-2px);
+    }
+
+    .p-org-logo {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+        border: 1px solid var(--border-color);
+        background: #ffffff;
+    }
+
+    .p-page-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 0;
+        letter-spacing: -0.025em;
+    }
+
+    .p-topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .p-user-pill {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 14px 6px 6px;
+        background: var(--user-pill-bg);
+        border-radius: 20px;
+        border: 1px solid var(--border-color);
+        transition: background 0.3s, border-color 0.3s;
+    }
+
+    .p-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--brand-green), var(--brand-amber));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        color: #ffffff;
+    }
+
+    .p-user-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-secondary);
+    }
+
+    .p-logout {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-decoration: none;
+        padding: 8px 18px;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        background: var(--bg-card);
+        transition: all 0.2s;
+    }
+
+    .p-logout:hover {
+        background: var(--user-pill-bg);
+        color: var(--text-primary);
+        border-color: var(--text-muted);
+    }
+
+    .btn-theme-toggle {
+        background: var(--user-pill-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.2s;
+    }
+    .btn-theme-toggle:hover {
+        background: var(--border-color);
+        transform: scale(1.05);
+    }
+
+    /* ── Main Layout ──────────────────────────────────────────── */
+    .p-main {
+        flex: 1;
+        padding: 32px;
+        max-width: 1440px;
+        margin: 0 auto;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* ── Card/Section Container ────────────────────────────────── */
+    .p-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03), 0 2px 8px -1px rgba(0, 0, 0, 0.02);
+        margin-bottom: 28px;
+        padding: 28px;
+        transition: background 0.3s, border-color 0.3s;
+    }
+
+    /* ── Search & Actions Bar ──────────────────────────────────── */
+    .search-actions-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 16px 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
+        transition: background 0.3s, border-color 0.3s;
+    }
+
+    .search-input-wrapper {
+        position: relative;
+        flex: 1;
+        max-width: 480px;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 16px;
+        color: var(--text-muted);
+        pointer-events: none;
+    }
+
+    .search-control {
+        width: 100%;
+        height: 46px;
+        padding: 0 16px 0 44px;
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        font-size: 14px;
+        color: var(--text-primary);
+        outline: none;
+        transition: all 0.2s;
+    }
+
+    .search-control:focus {
+        border-color: var(--brand-green);
+        box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15);
+        background: var(--bg-card);
+    }
+
+    .actions-buttons-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .btn-trigger-drawer {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: 46px;
+        padding: 0 20px;
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-trigger-drawer:hover {
+        background: var(--border-color);
+        color: var(--text-primary);
+    }
+
+    .filter-count-badge {
+        background: var(--brand-green);
+        color: #ffffff;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 10px;
+        margin-left: 2px;
+    }
+
+    .btn-reset-filters {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .btn-reset-filters:hover {
+        color: var(--brand-amber);
+    }
+
+    /* ── Offcanvas Filter Drawer ──────────────────────────────── */
+    .filter-drawer-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.4);
+        backdrop-filter: blur(4px);
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .filter-drawer-backdrop.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .filter-drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 360px;
+        background: var(--bg-card);
+        border-left: 1px solid var(--border-color);
+        z-index: 1001;
+        box-shadow: -10px 0 30px -10px rgba(0, 0, 0, 0.15);
+        display: flex;
+        flex-direction: column;
+        transform: translateX(100%);
+        visibility: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .filter-drawer.active {
+        transform: translateX(0);
+        visibility: visible;
+    }
+
+    .drawer-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 24px 28px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .drawer-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 0;
+    }
+
+    .btn-close-drawer {
+        background: none;
+        border: none;
+        font-size: 18px;
+        color: var(--text-secondary);
+        cursor: pointer;
+        padding: 4px;
+        transition: color 0.2s;
+    }
+
+    .btn-close-drawer:hover {
+        color: var(--text-primary);
+    }
+
+    .drawer-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .drawer-field-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .filter-label {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .filter-control {
+        width: 100%;
+        height: 44px;
+        padding: 0 14px;
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        font-size: 14px;
+        color: var(--text-primary);
+        outline: none;
+        transition: border-color 0.2s;
+        box-sizing: border-box;
+    }
+
+    .filter-control:focus {
+        border-color: var(--brand-green);
+    }
+
+    .date-range-inputs {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .drawer-footer {
+        padding: 24px 28px;
+        border-top: 1px solid var(--border-color);
+        background: var(--modal-footer-bg);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .btn-drawer-reset {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 44px;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-card);
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .btn-drawer-reset:hover {
+        background: var(--bg-primary);
+    }
+
+    .btn-drawer-apply {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 44px;
+        border-radius: 10px;
+        border: none;
+        background: var(--brand-green);
+        font-size: 14px;
+        font-weight: 600;
+        color: #ffffff;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-drawer-apply:hover {
+        background: var(--brand-green-hover);
+    }
+
+    /* ── Responsive Data Table ────────────────────────────────── */
+    .table-responsive-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .p-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+    }
+
+    .p-table th {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        letter-spacing: 0.05em;
+        padding: 16px 20px;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .p-table td {
+        font-size: 14px;
+        color: var(--text-primary);
+        padding: 18px 20px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .p-row-interactive {
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .p-row-interactive:hover {
+        background-color: var(--user-pill-bg);
+    }
+
+    /* ── Badges ────────────────────────────────────────────────── */
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .badge-conducted {
+        background: var(--status-conducted-bg);
+        color: var(--status-conducted-text);
+    }
+
+    .badge-cancelled {
+        background: var(--status-cancelled-bg);
+        color: var(--status-cancelled-text);
+    }
+
+    .badge-topic {
+        background: var(--brand-amber-light);
+        color: var(--brand-amber);
+        border: 1px solid var(--border-color);
+        margin: 2px;
+    }
+
+    /* ── Pagination ────────────────────────────────────────────── */
+    .p-pagination {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 24px;
+        padding: 16px 24px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .pagination-info {
+        font-size: 13px;
+        color: var(--text-secondary);
+    }
+
+    .pagination-buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-page {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 36px;
+        height: 36px;
+        padding: 0 12px;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-card);
+        color: var(--text-secondary);
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .btn-page:hover:not(.disabled) {
+        background: var(--user-pill-bg);
+        color: var(--text-primary);
+    }
+
+    .btn-page.active {
+        background: var(--brand-green);
+        color: #ffffff;
+        border-color: var(--brand-green);
+    }
+
+    .btn-page.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    /* ── Interactive Session ID Link ────────────────────────────── */
+    .session-id-link {
+        color: var(--brand-green);
+        text-decoration: underline;
+        font-weight: 700;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+    .session-id-link:hover {
+        color: var(--brand-green-hover);
+    }
+
+    /* ── Detail Dialog Modal (Backdrop Overlay - Referral pattern) ─ */
+    .p-modal-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.5);
+        backdrop-filter: blur(8px);
+        z-index: 1200;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        animation: fadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .p-modal-backdrop.open {
+        display: flex;
+    }
+
+    .p-modal-dialog {
+        background: var(--modal-bg);
+        border-radius: 24px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        width: 100%;
+        max-width: 760px;
+        max-height: 88vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    body.p-modal-open {
+        overflow: hidden !important;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 24px 32px;
+        border-bottom: 1px solid var(--border-color);
+        background: linear-gradient(135deg, var(--brand-green), #115e59);
+        color: #ffffff;
+    }
+
+    .modal-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .btn-close-modal-top {
+        background: rgba(255, 255, 255, 0.15);
+        border: none;
+        font-size: 16px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        color: #ffffff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+    }
+
+    .btn-close-modal-top:hover {
+        background: rgba(255, 255, 255, 0.25);
+    }
+
+    .modal-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        box-sizing: border-box;
+    }
+
+    .detail-section-title {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 8px;
+        margin: 0 0 14px 0;
+    }
+
+    .detail-grid-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px 24px;
+    }
+
+    .detail-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .detail-label {
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+    }
+
+    .detail-value {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    /* ── Child Table grids inside Modal ────────────────────────── */
+    .child-data-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        background: var(--bg-primary);
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+    }
+
+    .child-data-table th {
+        padding: 10px 14px;
+        font-weight: 700;
+        color: var(--text-secondary);
+        background: var(--border-color);
+        text-align: left;
+        border: none;
+    }
+
+    .child-data-table td {
+        padding: 12px 14px;
+        color: var(--text-primary);
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .child-data-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .img-thumbnail {
+        width: 48px;
+        height: 48px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid var(--border-color);
+        cursor: zoom-in;
+        transition: transform 0.2s;
+    }
+
+    .img-thumbnail:hover {
+        transform: scale(1.08);
+    }
+
+    .modal-footer {
+        padding: 24px 32px;
+        border-top: 1px solid var(--border-color);
+        background: var(--modal-footer-bg);
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+    }
+
+    .btn-open-frappe {
+        padding: 12px 24px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #ffffff;
+        background: var(--brand-green);
+        border: 1px solid var(--brand-green);
+        border-radius: 12px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-open-frappe:hover {
+        background: var(--brand-green-hover);
+        border-color: var(--brand-green-hover);
+    }
+
+    .btn-close-modal {
+        padding: 12px 24px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-close-modal:hover {
+        background: var(--user-pill-bg);
+        color: var(--text-primary);
+    }
+
+    /* ── Lightbox Image Viewer Overlay ─────────────────────────── */
+    .lightbox {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(10px);
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .lightbox.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .lightbox-img {
+        max-width: 90%;
+        max-height: 85vh;
+        border-radius: 12px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        transform: scale(0.95);
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .lightbox.active .lightbox-img {
+        transform: scale(1);
+    }
+
+    .btn-close-lightbox {
+        position: absolute;
+        top: 24px;
+        right: 32px;
+        background: rgba(255, 255, 255, 0.15);
+        border: none;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        font-size: 20px;
+        color: #ffffff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+    }
+
+    .btn-close-lightbox:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* ── Empty State ───────────────────────────────────────────── */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-muted);
+    }
+
+    .empty-icon {
+        font-size: 48px;
+        margin-bottom: 12px;
+    }
+
+    .empty-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        margin-bottom: 4px;
+    }
+
+    .empty-text {
+        font-size: 13px;
+        margin: 0;
+    }
+
+    /* ── Custom scrollbars for details drawer & list view ──────── */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--text-muted);
+    }
+</style>
+{% endblock %}
+
+{% block page_content %}
+<div id="health-education-root">
+    <!-- Topbar -->
+    <div class="p-topbar">
+        <div class="p-topbar-left">
+            <a href="/portal" class="btn-back-portal" title="Back to Portal">←</a>
+            <img class="p-org-logo" src="/assets/referral/images/search-logo.jpg" alt="SEARCH Logo" />
+            <h1 class="p-page-title">Village Health Education Dashboard</h1>
+        </div>
+        <div class="p-topbar-right">
+            <button id="theme-toggle" class="btn-theme-toggle" title="Toggle dark/light mode">🌙</button>
+            <div class="p-user-pill">
+                <div class="p-avatar">{{ user_fullname[0] | upper if user_fullname else 'U' }}</div>
+                <span class="p-user-name">{{ user_fullname }}</span>
+            </div>
+            <a href="#" onclick="handleLogout(event)" class="p-logout">Sign out</a>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="p-main">
+        <form id="filter-form" method="GET" action="/village_health_education">
+            <input type="hidden" name="page" id="form-page" value="{{ current_page }}" />
+
+            <!-- Action Bar -->
+            <div class="search-actions-bar">
+                <div class="search-input-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input class="search-control" type="text" name="search" value="{{ filters.search or '' }}"
+                        placeholder="Search session ID, village, area, or educator..." />
+                </div>
+                <div class="actions-buttons-wrapper">
+                    <button type="button" class="btn-trigger-drawer" onclick="openFilterDrawer()">
+                        <span>🎛️</span> Filters
+                        {% set active_count = 0 %}
+                        {% if filters.area %}{% set active_count = active_count + 1 %}{% endif %}
+                        {% if filters.village %}{% set active_count = active_count + 1 %}{% endif %}
+                        {% if filters.session_conducted %}{% set active_count = active_count + 1 %}{% endif %}
+                        {% if filters.topic %}{% set active_count = active_count + 1 %}{% endif %}
+                        {% if filters.start_date %}{% set active_count = active_count + 1 %}{% endif %}
+                        {% if filters.end_date %}{% set active_count = active_count + 1 %}{% endif %}
+                        
+                        {% if active_count > 0 %}
+                        <span class="filter-count-badge">{{ active_count }}</span>
+                        {% endif %}
+                    </button>
+                    {% if active_count > 0 or filters.search %}
+                    <a href="/village_health_education" class="btn-reset-filters">Reset All</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Slide-Out Filter Drawer (Offcanvas Sidebar) -->
+            <div class="filter-drawer-backdrop" id="filter-drawer-backdrop" onclick="closeFilterDrawer()"></div>
+            <div class="filter-drawer" id="filter-drawer">
+                <div class="drawer-header">
+                    <h3 class="drawer-title">Filters</h3>
+                    <button type="button" class="btn-close-drawer" onclick="closeFilterDrawer()">✕</button>
+                </div>
+                
+                <div class="drawer-body">
+                    <!-- Session Conducted -->
+                    <div class="drawer-field-group">
+                        <label class="filter-label">Session Conducted</label>
+                        <select class="filter-control" name="session_conducted">
+                            <option value="">All Statuses</option>
+                            <option value="Yes" {% if filters.session_conducted == "Yes" %}selected{% endif %}>Yes</option>
+                            <option value="No" {% if filters.session_conducted == "No" %}selected{% endif %}>No</option>
+                        </select>
+                    </div>
+
+                    <!-- Area -->
+                    <div class="drawer-field-group">
+                        <label class="filter-label">Area</label>
+                        <select class="filter-control" name="area">
+                            <option value="">All Areas</option>
+                            {% for opt in filter_areas %}
+                            <option value="{{ opt }}" {% if filters.area == opt %}selected{% endif %}>{{ opt }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Village -->
+                    <div class="drawer-field-group">
+                        <label class="filter-label">Village</label>
+                        <select class="filter-control" name="village">
+                            <option value="">All Villages</option>
+                            {% for opt in filter_villages %}
+                            <option value="{{ opt }}" {% if filters.village == opt %}selected{% endif %}>{{ opt }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Topic Covered -->
+                    <div class="drawer-field-group">
+                        <label class="filter-label">Topic Covered</label>
+                        <select class="filter-control" name="topic">
+                            <option value="">All Topics</option>
+                            {% for opt in filter_topics %}
+                            <option value="{{ opt }}" {% if filters.topic == opt %}selected{% endif %}>{{ opt }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Date Range -->
+                    <div class="drawer-field-group">
+                        <label class="filter-label">Date Range</label>
+                        <div class="date-range-inputs">
+                            <input class="filter-control" type="date" name="start_date" value="{{ filters.start_date or '' }}" placeholder="Start Date" />
+                            <input class="filter-control" type="date" name="end_date" value="{{ filters.end_date or '' }}" placeholder="End Date" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="drawer-footer">
+                    <a href="/village_health_education" class="btn-drawer-reset">Clear Filters</a>
+                    <button type="submit" class="btn-drawer-apply">Apply Filters</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Sessions List Card -->
+        <div class="p-card">
+            {% if records %}
+            <div class="table-responsive-wrapper">
+                <table class="p-table">
+                    <thead>
+                        <tr>
+                            <th>Session ID</th>
+                            <th>Date</th>
+                            <th>Village</th>
+                            <th>Area</th>
+                            <th>Conducted?</th>
+                            <th>Participants</th>
+                            <th>Educator</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rec in records %}
+                        <tr class="p-row-interactive" onclick="viewDetail('{{ rec.name }}')">
+                            <td style="font-weight: 700;">
+                                <a href="javascript:void(0)" onclick="event.stopPropagation(); viewDetail('{{ rec.name }}')" class="session-id-link" title="Click to view session details">{{ rec.name }}</a>
+                            </td>
+                            <td>{{ rec.formatted_date }}</td>
+                            <td style="font-weight: 600;">{{ rec.village or '-' }}</td>
+                            <td>{{ rec.area or '-' }}</td>
+                            <td>
+                                {% if rec.session_conducted == "Yes" %}
+                                <span class="badge badge-conducted">Yes</span>
+                                {% else %}
+                                <span class="badge badge-cancelled">No</span>
+                                {% endif %}
+                            </td>
+                            <td style="font-weight: 600;">{{ rec.total_number_of_participants or 0 }}</td>
+                            <td>{{ rec.health_educator_name or '-' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="p-pagination">
+                <span class="pagination-info">
+                    Showing {{ records|length }} of {{ total_records }} sessions
+                </span>
+                <div class="pagination-buttons">
+                    <button class="btn-page {% if current_page == 1 %}disabled{% endif %}" onclick="changePage({{ current_page - 1 }})" type="button">Prev</button>
+                    {% for p in range(1, total_pages + 1) %}
+                        {% if p == 1 or p == total_pages or (p >= current_page - 2 and p <= current_page + 2) %}
+                            <button class="btn-page {% if current_page == p %}active{% endif %}" onclick="changePage({{ p }})" type="button">{{ p }}</button>
+                        {% elif p == current_page - 3 or p == current_page + 3 %}
+                            <span style="align-self: center; padding: 0 4px; color: var(--text-muted);">...</span>
+                        {% endif %}
+                    {% endfor %}
+                    <button class="btn-page {% if current_page == total_pages %}disabled{% endif %}" onclick="changePage({{ current_page + 1 }})" type="button">Next</button>
+                </div>
+            </div>
+            {% else %}
+            <!-- Empty State -->
+            <div class="empty-state">
+                <div class="empty-icon">🍃</div>
+                <h4 class="empty-title">No Sessions Found</h4>
+                <p class="empty-text">Try adjusting your filters or search criteria.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Dialog Modal (Backdrop Overlay) -->
+<div class="p-modal-backdrop" id="session-detail-backdrop" onclick="closeModal()">
+    <div class="p-modal-dialog" id="session-detail-modal" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-title-id">Session Details</h3>
+            <button class="btn-close-modal-top" onclick="closeModal()">✕</button>
+        </div>
+        <div class="modal-body">
+            <!-- Basic Info -->
+            <div>
+                <h4 class="detail-section-title">Session Information</h4>
+                <div class="detail-grid-row">
+                    <div class="detail-item">
+                        <span class="detail-label">Session ID</span>
+                        <span class="detail-value" id="detail-session-name">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Date</span>
+                        <span class="detail-value" id="detail-date">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Village</span>
+                        <span class="detail-value" id="detail-village">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Area</span>
+                        <span class="detail-value" id="detail-area">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Session Conducted Info -->
+            <div>
+                <h4 class="detail-section-title">Execution Details</h4>
+                <div class="detail-grid-row">
+                    <div class="detail-item">
+                        <span class="detail-label">Session Conducted</span>
+                        <span class="detail-value" id="detail-conducted">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Health Educator</span>
+                        <span class="detail-value" id="detail-educator">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Search Driver</span>
+                        <span class="detail-value" id="detail-driver">-</span>
+                    </div>
+                    <div class="detail-item" id="detail-reason-cancelled-wrapper">
+                        <span class="detail-label">Reason for Cancellation</span>
+                        <span class="detail-value" id="detail-reason-cancelled">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Topics covered -->
+            <div id="detail-topics-wrapper">
+                <h4 class="detail-section-title">Topics Covered</h4>
+                <div id="detail-topics-container" style="display: flex; flex-wrap: wrap; gap: 4px;"></div>
+            </div>
+
+            <!-- Locations visited -->
+            <div id="detail-locations-wrapper">
+                <h4 class="detail-section-title">Places and Attendance</h4>
+                <div class="detail-grid-row" style="grid-template-columns: 1fr 1fr; margin-bottom: 12px;">
+                    <div class="detail-item">
+                        <span class="detail-label">Number of Places</span>
+                        <span class="detail-value" id="detail-count-places">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Total Participants</span>
+                        <span class="detail-value" id="detail-count-participants">-</span>
+                    </div>
+                </div>
+                
+                <table class="child-data-table">
+                    <thead>
+                        <tr>
+                            <th>Place Name</th>
+                            <th>Participants</th>
+                            <th style="width: 80px;">Photo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detail-locations-body"></tbody>
+                </table>
+            </div>
+
+            <!-- Village Patil meeting -->
+            <div>
+                <h4 class="detail-section-title">Village Patil Interaction</h4>
+                <div class="detail-grid-row">
+                    <div class="detail-item">
+                        <span class="detail-label">Met Village Patil?</span>
+                        <span class="detail-value" id="detail-patil-met">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Patil Name</span>
+                        <span class="detail-value" id="detail-patil-name">-</span>
+                    </div>
+                    <div class="detail-item" id="detail-patil-feedback-wrapper" style="grid-column: 1 / -1;">
+                        <span class="detail-label">Feedback from Patil</span>
+                        <span class="detail-value" id="detail-patil-feedback">-</span>
+                    </div>
+                    <div class="detail-item" id="detail-patil-reason-wrapper" style="grid-column: 1 / -1;">
+                        <span class="detail-label">Reason for not meeting</span>
+                        <span class="detail-value" id="detail-patil-not-met-reason">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GPS Coordinates -->
+            <div>
+                <h4 class="detail-section-title">GPS Coordinates</h4>
+                <div class="detail-grid-row">
+                    <div class="detail-item">
+                        <span class="detail-label">Latitude</span>
+                        <span class="detail-value" id="detail-lat">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Longitude</span>
+                        <span class="detail-value" id="detail-lon">-</span>
+                    </div>
+                    <div class="detail-item" style="grid-column: 1 / -1; display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+                        <div>
+                            <span class="detail-label">Raw Geopoint</span>
+                            <span class="detail-value" id="detail-gps-raw" style="font-size: 12px; font-family: monospace;">-</span>
+                        </div>
+                        <a id="btn-view-map" href="#" target="_blank" class="btn-open-frappe" style="background: var(--brand-amber); border-color: var(--brand-amber); padding: 8px 16px; font-size: 12px;">🗺️ Open in Map</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Links to Raw Doc -->
+            <div style="background: var(--bg-primary); border: 1px dashed var(--border-color); border-radius: 12px; padding: 16px;">
+                <div class="detail-item">
+                    <span class="detail-label">Synced Kobo Raw Entry</span>
+                    <span class="detail-value" id="detail-raw-link">-</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a id="btn-edit-frappe" href="#" target="_blank" class="btn-open-frappe">Open in Frappe</a>
+            <button class="btn-close-modal" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Lightbox overlay -->
+<div class="lightbox" id="image-lightbox" onclick="closeLightbox()">
+    <button class="btn-close-lightbox" onclick="closeLightbox()">✕</button>
+    <img class="lightbox-img" id="lightbox-img-source" src="" alt="Lightbox image" onclick="event.stopPropagation()" />
+</div>
+
+<!-- Script database array -->
+<script type="application/json" id="records-data">
+    {{ records_json | safe }}
+</script>
+
+<script>
+    // Handle Logout
+    function handleLogout(e) {
+        if (e) e.preventDefault();
+        fetch("/api/method/logout", {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Frappe-CSRF-Token": "{{ csrf_token }}"
+            }
+        })
+        .then(function() {
+            window.location.href = "/login";
+        })
+        .catch(function() {
+            window.location.href = "/login";
+        });
+    }
+
+    // Parse list of sessions
+    let recordsList = [];
+    try {
+        recordsList = JSON.parse(document.getElementById("records-data").textContent);
+    } catch (e) {
+        console.error("Failed to parse records list", e);
+    }
+
+    // Modal elements
+    const modal = document.getElementById("session-detail-modal");
+
+    // Open detail modal
+    function viewDetail(name) {
+        const item = recordsList.find(r => r.name === name);
+        if (!item) return;
+
+        // General
+        document.getElementById("detail-session-name").innerText = item.name;
+        document.getElementById("detail-date").innerText = item.formatted_date || "-";
+        document.getElementById("detail-village").innerText = item.village || "-";
+        document.getElementById("detail-area").innerText = item.area || "-";
+
+        // Execution
+        document.getElementById("detail-conducted").innerText = item.session_conducted || "-";
+        document.getElementById("detail-educator").innerText = item.health_educator_name || "-";
+        document.getElementById("detail-driver").innerText = item.search_driver_name || "-";
+        
+        const reasonCancelledWrap = document.getElementById("detail-reason-cancelled-wrapper");
+        if (item.session_conducted === "No" && item.reason_for_not_conducting) {
+            document.getElementById("detail-reason-cancelled").innerText = item.reason_for_not_conducting;
+            reasonCancelledWrap.style.display = "flex";
+        } else {
+            reasonCancelledWrap.style.display = "none";
+        }
+
+        // Topics pills
+        const topicsContainer = document.getElementById("detail-topics-container");
+        const topicsWrapper = document.getElementById("detail-topics-wrapper");
+        topicsContainer.innerHTML = "";
+        const topics = item.topics || [];
+        if (topics.length === 0) {
+            topicsWrapper.style.display = "none";
+        } else {
+            topicsWrapper.style.display = "block";
+            topics.forEach(t => {
+                const badge = document.createElement("span");
+                badge.className = "badge badge-topic";
+                badge.innerText = t.topic;
+                topicsContainer.appendChild(badge);
+            });
+        }
+
+        // Locations & attendance
+        document.getElementById("detail-count-places").innerText = item.number_of_places || "0";
+        document.getElementById("detail-count-participants").innerText = item.total_number_of_participants || "0";
+        
+        const locsBody = document.getElementById("detail-locations-body");
+        locsBody.innerHTML = "";
+        const locations = item.locations || [];
+        locations.forEach(loc => {
+            const tr = document.createElement("tr");
+            
+            // Photo cell
+            let photoHtml = `<span style="color: var(--text-muted); font-size: 12px; font-style: italic;">No photo</span>`;
+            if (loc.photo) {
+                photoHtml = `<img src="${loc.photo}" class="img-thumbnail" alt="Session place photo" onclick="openLightbox('${loc.photo}')" />`;
+            }
+            
+            tr.innerHTML = `
+                <td style="font-weight: 600;">${loc.location_name || '-'}</td>
+                <td style="font-weight: 700; color: var(--brand-green);">${loc.number_of_participants || 0}</td>
+                <td>${photoHtml}</td>
+            `;
+            locsBody.appendChild(tr);
+        });
+
+        // Patil
+        document.getElementById("detail-patil-met").innerText = item.village_patil_met || "-";
+        document.getElementById("detail-patil-name").innerText = item.village_patil_name || "-";
+        
+        const feedbackWrap = document.getElementById("detail-patil-feedback-wrapper");
+        const reasonNotMetWrap = document.getElementById("detail-patil-reason-wrapper");
+        
+        if (item.village_patil_met === "Yes" && item.village_patil_feedback) {
+            document.getElementById("detail-patil-feedback").innerText = item.village_patil_feedback;
+            feedbackWrap.style.display = "flex";
+            reasonNotMetWrap.style.display = "none";
+        } else if (item.village_patil_met === "No" && item.reason_for_not_meeting_patil) {
+            document.getElementById("detail-patil-not-met-reason").innerText = item.reason_for_not_meeting_patil;
+            reasonNotMetWrap.style.display = "flex";
+            feedbackWrap.style.display = "none";
+        } else {
+            feedbackWrap.style.display = "none";
+            reasonNotMetWrap.style.display = "none";
+        }
+
+        // GPS
+        document.getElementById("detail-lat").innerText = item.latitude || "-";
+        document.getElementById("detail-lon").innerText = item.longitude || "-";
+        document.getElementById("detail-gps-raw").innerText = item.gps_raw || "-";
+        
+        const mapBtn = document.getElementById("btn-view-map");
+        if (item.latitude && item.longitude) {
+            mapBtn.href = `https://www.google.com/maps/search/?api=1&query=${item.latitude},${item.longitude}`;
+            mapBtn.style.display = "inline-flex";
+        } else {
+            mapBtn.style.display = "none";
+        }
+
+        // Links
+        const rawLink = document.getElementById("detail-raw-link");
+        if (item.raw_village_health_education) {
+            rawLink.innerHTML = `<a href="/app/raw-village-health-education/${item.raw_village_health_education}" target="_blank" style="color: var(--brand-green); font-weight: bold; text-decoration: underline;">${item.raw_village_health_education}</a>`;
+        } else {
+            rawLink.innerText = "None";
+        }
+
+        // Frappe link button
+        document.getElementById("btn-edit-frappe").href = `/app/village-health-education/${item.name}`;
+
+        // Show Modal Dialog (Referral pattern backdrop)
+        document.getElementById("session-detail-backdrop").classList.add("open");
+        document.body.classList.add("p-modal-open");
+    }
+
+    // Close Modal
+    function closeModal() {
+        document.getElementById("session-detail-backdrop").classList.remove("open");
+        document.body.classList.remove("p-modal-open");
+    }
+
+    // Filter drawer functions
+    function openFilterDrawer() {
+        document.getElementById("filter-drawer").classList.add("active");
+        document.getElementById("filter-drawer-backdrop").classList.add("active");
+    }
+
+    function closeFilterDrawer() {
+        document.getElementById("filter-drawer").classList.remove("active");
+        document.getElementById("filter-drawer-backdrop").classList.remove("active");
+    }
+
+    // Pagination function
+    function changePage(pageNo) {
+        document.getElementById("form-page").value = pageNo;
+        document.getElementById("filter-form").submit();
+    }
+
+    // Lightbox image functions
+    function openLightbox(url) {
+        const lightbox = document.getElementById("image-lightbox");
+        const img = document.getElementById("lightbox-img-source");
+        img.src = url;
+        lightbox.classList.add("active");
+    }
+
+    function closeLightbox() {
+        const lightbox = document.getElementById("image-lightbox");
+        lightbox.classList.remove("active");
+    }
+
+    // Close on ESC
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+            closeModal();
+            closeFilterDrawer();
+            closeLightbox();
+        }
+    });
+
+    // Theme Toggle Logic
+    const toggleBtn = document.getElementById('theme-toggle');
+    const savedTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        toggleBtn.textContent = '☀️';
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        toggleBtn.textContent = '🌙';
+    }
+
+    toggleBtn.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            toggleBtn.textContent = '🌙';
+            localStorage.setItem('theme', 'light');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            toggleBtn.textContent = '☀️';
+            localStorage.setItem('theme', 'dark');
+        }
+    });
+</script>
+{% endblock %}
