@@ -182,12 +182,12 @@
   },
   {
    "fieldname": "village_patil_feedback",
-   "fieldtype": "Data",
+   "fieldtype": "Small Text",
    "label": "Village Patil Feedback"
   },
   {
    "fieldname": "reason_for_not_meeting_patil",
-   "fieldtype": "Data",
+   "fieldtype": "Small Text",
    "label": "Reason for Not Meeting Patil"
   },
   {
@@ -221,30 +221,6 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Village Tribal Health Admin",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 0,
-   "email": 1,
-   "export": 0,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Village Tribal Health User",
-   "share": 0,
    "write": 1
   },
   {
